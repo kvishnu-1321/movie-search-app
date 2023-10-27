@@ -6,8 +6,10 @@ import "./moviesList.css";
 const MovieSearch = () => {
   const [searchText, setSearchText] = useState("");
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+     setLoading(true);
     try {
       const response = await axios.get("https://www.omdbapi.com/", {
         params: {
@@ -18,6 +20,7 @@ const MovieSearch = () => {
       console.log(response);
       //console.log(response.data.Search);
       setMovies(response.data.Search);
+      setLoading(false)
       //console.log(movies);
     } catch (error) {
       console.log("Error fetching data:", error);
@@ -37,7 +40,7 @@ const MovieSearch = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-      <MovieList movies={movies} />
+      {loading ? <p>Loading...</p> : <MovieList movies={movies} />}
     </div>
   );
 };
